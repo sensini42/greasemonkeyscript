@@ -1,15 +1,31 @@
 // ==UserScript==
 // @name           kadokado
 // @namespace      kadokado
-// @include        http://www.kadokado.com/clan/*/status
+// @include        http://www.kadokado.com/clan/2441/status
 // ==/UserScript==
 
 function dojob () {
 
+	var css = document.createElement('style')
+	css.setAttribute('type','text/css')
+	css.innerHTML = "span.er {color : #466167 ; font-weight : bold; background : url(/gfx/icons/redStar.gif) no-repeat center left; padding-left : 19px;}"
+		+ "span.ev {color : #466167 ; font-weight : bold; background : url(/gfx/icons/greenStar.gif) no-repeat center left; padding-left : 19px;}"
+		+ "span.eo {color : #466167 ; font-weight : bold; background : url(/gfx/icons/orangeStar.gif) no-repeat center left; padding-left : 19px;}";
+	document.lastChild.appendChild(css);
+
+
 	var regniv = /level.*\.gif/;
 	var regeto = /.*Star\.gif/;
 	var regsup = /ok\.gif/;
-	var deff = /.*defme.*/
+	var deff = /.*defme.*/;
+
+	var orange = /.*orange/;
+	var rouge = /.*red/;
+	var vert = /.*green/;
+
+	var etoileorange = "http://dat.kadokado.com/gfx/icons/orangeStar.gif";
+	var etoilerouge = "http://dat.kadokado.com/gfx/icons/redStar.gif";
+	var etoileverte = "http://dat.kadokado.com/gfx/icons/greenStar.gif";
 
 	function getInfos(var1){
 		var tab = [];
@@ -74,9 +90,11 @@ function dojob () {
 	} else {
 		mission = 1
 	}
+
 	var tab = ['M','N','E','S'];
 	for(var i=0; i<tab.length; i++){
-		var tmp = document.createElement('td');
+		var tmp = document.createElement('th');
+		tmp.setAttribute('class','tiny');
 		var tmp_txt = document.createTextNode(tab[i]);
 		tmp.appendChild(tmp_txt);
 		tr.appendChild(tmp);
@@ -101,8 +119,18 @@ function dojob () {
 				}
 			}
 		} else {
-			if(deff.exec(tr.getAttribute('class'))){
-				var tab = getInfos(tr.getElementsByTagName('span')[1].innerHTML)
+			var class = tr.getAttribute('class');
+			if(deff.exec(class)){
+				var span = tr.getElementsByTagName('span')[1];
+				var tmp_img = document.createElement('img');
+				if(orange.exec(class)){
+					span.setAttribute('class','eo');
+				} else if(rouge.exec(class)){
+					span.setAttribute('class','er');
+				} else {
+					span.setAttribute('class','ev');
+				}
+				var tab = getInfos(span.innerHTML);
 				for(var j=0; j<tab.length; j++){
 					var tmp = document.createElement('td');
 					if(tab[j] != ''){
