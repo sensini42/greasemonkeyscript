@@ -18,6 +18,7 @@ function dojob () {
 	var regeto = /.*Star\.gif/;
 	var regsup = /ok\.gif/;
 	var deff = /.*defme.*/;
+	var atak = /.*attack.*/;
 
 	var orange = /.*orange/;
 	var rouge = /.*red/;
@@ -120,7 +121,7 @@ function dojob () {
 			}
 		} else {
 			var class = tr.getAttribute('class');
-			if(deff.exec(class)){
+			if(deff.exec(class) || atak.exec(class)){
 				var span = tr.getElementsByTagName('span')[1];
 				var tmp_img = document.createElement('img');
 				if(orange.exec(class)){
@@ -130,17 +131,19 @@ function dojob () {
 				} else {
 					span.setAttribute('class','ev');
 				}
-				var tab = getInfos(span.innerHTML);
-				for(var j=0; j<tab.length; j++){
-					var tmp = document.createElement('td');
-					if(tab[j] != ''){
-						var tmp_img = document.createElement('img');
-						tmp_img.setAttribute('src',tab[j]);
-						tmp.appendChild(tmp_img);
+				if(deff.exec(class)){
+					var tab = getInfos(span.innerHTML);
+					for(var j=0; j<tab.length; j++){
+						var tmp = document.createElement('td');
+						if(tab[j] != ''){
+							var tmp_img = document.createElement('img');
+							tmp_img.setAttribute('src',tab[j]);
+							tmp.appendChild(tmp_img);
+						}
+						tr.appendChild(tmp);
 					}
-					tr.appendChild(tmp);
 				}
-			}
+			} 
 		}
 	}
 		
